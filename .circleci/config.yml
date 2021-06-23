@@ -15,4 +15,4 @@ jobs:
     docker:
       - image: cimg/python:3.8
     steps:
-       - run: echo $TEST hi!
+       - run: echo $TEST hello!
