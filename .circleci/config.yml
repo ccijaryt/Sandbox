@@ -15,4 +15,5 @@ jobs:
     docker:
       - image: cimg/python:3.8
     steps:
-       - run: echo $TEST if you see this, its wrong!
+       - run: echo $TEST this should be run twice!
+
