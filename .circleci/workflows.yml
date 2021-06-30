@@ -1,0 +1,35 @@
+version: 2.1
+
+parameters:
+  node_workflow:
+    type: boolean
+    default: false
+  python_workflow:
+    type: boolean
+    default: false
+
+
+jobs:
+  node: 
+    docker: 
+      - image: cimg/node:16.4.0
+    steps:
+      - checkout
+      - run: node node/index.js
+  python: 
+    docker:
+      - image: cimg/python:3.9.6
+    steps:
+      - checkout
+      - run: python3 python/main.py
+
+
+workflows:
+  node:
+    when: << pipeline.parameters.node_workflow >>
+    jobs:
+      - node
+  python:
+    when: << pipeline.parameters.python_workflow >>
+    jobs:
+      - python
