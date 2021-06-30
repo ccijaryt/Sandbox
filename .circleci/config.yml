@@ -1,18 +1,42 @@
 version: 2.1
 
+setup : true
+
+parameters:
+  api:
+    type: boolean
+    default: false
+  node_workflow:
+    type: boolean
+    default: false
+  python_workflow:
+    type: boolean
+    default: false
+
+
 orbs:
-  python: circleci/python@1.2
+  path-filtering: circleci/path-filtering@0.0.2
+  continuation: circleci/continuation@0.2.0
 
 workflows:
-  test: 
+  setup-filter:
+    when:
+      not: << pipeline.parameters.api >>
     jobs:
-      - test:
-          context:
-            - context-test
+      - path-filtering/filter:
+          mapping: |
+            node/.* node_workflow true
+            python/.* python_workflow true
+          base-revision: master
+          config-path: .circleci/workflows.yml
+  setup-continue:
+    when: << pipeline.parameters.api >>
+    jobs: 
+      - continuation/continue:
+          parameters: |
+            '{ 
+              "node_workflow": << pipeline.parameters.node_workflow >>,
+              "python_workflow": << pipeline.parameters.python_workflow >>
+             }'
 
-jobs:
-  test: 
-    docker:
-      - image: cimg/python:3.8
-    steps:
-       - run: echo $TEST hi!
+          configuration_path: .circleci/workflows.yml
