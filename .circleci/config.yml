@@ -6,13 +6,11 @@ orbs:
 workflows:
   test: 
     jobs:
-      - test:
-          context:
-            - context-test
+      - test
 
 jobs:
   test: 
     docker:
       - image: cimg/python:3.8
     steps:
-       - run: echo $TEST good bye!
+       - run: echo from develop to master!
